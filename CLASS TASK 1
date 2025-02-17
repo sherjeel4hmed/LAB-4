@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Matrix {
+    int rows;
+    int colums;
+    vector<vector<double>> matrix;
+
+public:
+    Matrix(int row, int column) : rows(row), colums(column), matrix(rows, vector<double>(colums, 0)) {}
+
+    Matrix() : rows(0), colums(0), matrix(0, vector<double>(0, 0)) {}
+
+    ~Matrix() {}
+
+    Matrix(const Matrix &other) : rows(other.rows), colums(other.colums), matrix(other.matrix) {}
+
+    Matrix(Matrix &&other) noexcept : rows(other.rows), colums(other.colums), matrix(move(other.matrix)) {
+        other.rows = 0;
+        other.colums = 0;
+    }
+
+    double &at(int r, int c) {
+        return matrix[r][c];
+    }
+
+    void fill(double value) {
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < colums; j++)
+                matrix[i][j] = value;
+    }
+
+    Matrix transpose() {
+        Matrix transposed(colums, rows);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < colums; j++)
+                transposed.matrix[j][i] = matrix[i][j];
+        return transposed;
+    }
+
+    void print() const {
+        for (const auto &row : matrix) {
+            for (double val : row)
+                cout << val << " ";
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    Matrix mat1(3, 3);
+    mat1.fill(5.5);
+    mat1.at(1, 1) = 10;
+    cout << "Original Matrix:\n";
+    mat1.print();
+
+    Matrix transposed = mat1.transpose();
+    cout << "Transposed Matrix:\n";
+    transposed.print();
+}
