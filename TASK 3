@@ -1,0 +1,38 @@
+#include<iostream>
+using namespace std;
+class Invoice{
+   string number;
+   string description;
+   int quantity;
+   double price;
+   public:
+   Invoice(string num,string des,int quan,double pr):number(num),description(des),quantity(quan),price(pr){
+    if (quantity<0)
+    {
+        quantity=0;
+    }
+    if (price<0)
+    {
+       price=0.0;
+    }
+   }
+double getInvoiceAmount(){
+   return price*quantity; 
+}
+void display() {
+    cout << "Part Number: " << number << endl;
+    cout << "Description: " << description << endl;
+    cout << "Quantity: " << quantity << endl;
+    cout << "Price Per Item: $" << price << endl;
+    cout << "Total Invoice Amount: $" << getInvoiceAmount() << endl;
+}
+};
+int main() {
+    Invoice item("111C", "Hammer", 5, 10.50);
+    item.display();
+
+    Invoice invalidItem("5678B", "Wrench", -3, -15.75);
+    invalidItem.display();
+
+    return 0;
+}
