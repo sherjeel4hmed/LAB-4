@@ -1,0 +1,107 @@
+#include<iostream>
+using namespace std;
+class Dynamicarray{
+int *arr;
+int length;
+public:
+Dynamicarray():arr(nullptr){}
+Dynamicarray(int len):length(len),arr(new int[len]{0}){}
+Dynamicarray(Dynamicarray&other):length(other.length),arr(new int(other.length)){
+cout << "copy Constructor Called" << endl;
+    for (int i = 0; i < length; i++)
+    {
+       arr[i]=other.arr[i];
+    }    
+}
+Dynamicarray(Dynamicarray&&other) noexcept:length(other.length),arr(other.arr){
+    cout << "Move Constructor Called" << endl;
+    other.arr = nullptr;
+    other.length = 0;
+}
+Dynamicarray& operator=(const Dynamicarray&other){
+    cout << "Copy Assignment Operator Called" << endl;
+    if (this == &other) return *this;
+    delete[] arr;
+
+    length = other.length;
+    arr = new int[length];
+    for (int i = 0; i < length; i++) {
+        arr[i] = other.arr[i];
+    }
+    return *this;
+}
+Dynamicarray& operator=(Dynamicarray&& other) noexcept {
+    cout << "Move Assignment Operator Called" << endl;
+    if (this == &other) return *this;
+
+    delete[] arr; 
+
+    arr = other.arr;
+    length = other.length;
+
+    other.arr = nullptr;
+    other.length = 0;
+
+    return *this;
+}
+~Dynamicarray() {
+    delete[] arr;
+}
+int size() {
+    return length;
+}
+int& at(int index) {
+    if (index < 0 || index >= length) {
+    cout<<"Index out of bounds"<<endl;
+    }
+    return arr[index];
+}
+int resize(int newSize) {
+    while(true){
+    if (newSize <= 0) {
+        cout<<"Not a valid size"<<endl;
+        cout<<"Enter the size again"<<endl;
+        cin>>newSize;
+        continue;
+    }
+    if(newSize>0){
+    int* newarr = new int[newSize](); 
+    for (int i = 0; i < min(length, newSize); i++) { 
+        newarr[i] = arr[i];
+        }
+        length=newSize;
+        delete[]arr;  
+        arr = newarr; 
+    }
+    break;
+}
+
+}
+void print() const {
+    for (int i = 0; i < length; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+};
+
+int main(){
+    Dynamicarray arr(5);
+    cout << "Initial array: ";
+    arr.print();
+
+    arr.at(2) = 10; 
+    cout << "After modification: ";
+    arr.print();
+
+    arr.resize(-1); 
+    cout << "After resizing to 8: ";
+    arr.print();
+
+    arr.resize(3); 
+    cout << "After resizing to 3: ";
+    arr.print();
+
+    return 0;  
+}
+
